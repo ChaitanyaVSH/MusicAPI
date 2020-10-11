@@ -19,6 +19,9 @@ const genres = [
  *
  * 3. To read the contents of the request body, enable the app to use the Express json
  * A. app.use(express.json())
+ *
+ * 4. Whenver using ID attribute, be careful of the parsing.
+ * A. Use parseInt()
  */
 
 app.get("/", (req, res) => {
@@ -58,12 +61,28 @@ app.post("/api/genres", (req, res) => {
 });
 
 app.put("/api/genres/:id", (req, res) => {
-  const genre = genres.find((genre) => genre.id === parseInt(req.params.id));
+  const genreId = parseInt(req.params.id);
+  const genre = genres.find((genre) => genre.id === genreId);
   if (!genre) {
     return res.status(404).send(`Genre: ${genreId} is not found`);
   }
 
   genre.genre = req.body.genre;
+  console.log(genres);
+  res.send(genres);
+});
+
+app.delete("/api/genres/:id", (req, res) => {
+  const id = req.params.id;
+
+  const genre = genres.find((genre) => genre.id === parseInt(id));
+
+  if (!genre) {
+    return res.status(404).send(`Genre with ID: ${id} is not found.`);
+  }
+
+  const index = genres.indexOf(genre);
+  genres.splice(index, 1);
   console.log(genres);
   res.send(genres);
 });
