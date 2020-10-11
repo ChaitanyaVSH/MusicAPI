@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5678;
 
+app.use(express.json());
+
 const genres = [
   { id: 1, genre: "Adventure" },
   { id: 2, genre: "Classical" },
@@ -14,6 +16,9 @@ const genres = [
  *
  * 2. Please send a proper response status if the resource is not available
  * A. res.status(400)
+ *
+ * 3. To read the contents of the request body, enable the app to use the Express json
+ * A. app.use(express.json())
  */
 
 app.get("/", (req, res) => {
@@ -37,10 +42,20 @@ app.get("/api/genres/:genre", (req, res) => {
   res.send(genre);
 });
 
-// app.post("/api/genres", (req, res) => {
-//   const genreName = req.body.genre;
-//   console.log(genreName);
-// });
+app.post("/api/genres", (req, res) => {
+  const id = genres.length + 1;
+  const genreName = req.body.genre;
+
+  const genre = {
+    id: id,
+    genre: genreName,
+  };
+
+  genres.push(genre);
+  console.log(genres);
+
+  res.send(genres);
+});
 
 app.listen(PORT, () => {
   console.log(`App is listening on the port: ${PORT}`);
