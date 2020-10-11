@@ -57,6 +57,17 @@ app.post("/api/genres", (req, res) => {
   res.send(genres);
 });
 
+app.put("/api/genres/:id", (req, res) => {
+  const genre = genres.find((genre) => genre.id === parseInt(req.params.id));
+  if (!genre) {
+    return res.status(404).send(`Genre: ${genreId} is not found`);
+  }
+
+  genre.genre = req.body.genre;
+  console.log(genres);
+  res.send(genres);
+});
+
 app.listen(PORT, () => {
   console.log(`App is listening on the port: ${PORT}`);
 });
